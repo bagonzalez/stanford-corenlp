@@ -23,7 +23,7 @@ import requests
 
 class StanfordCoreNLP:
     def __init__(self, path_or_host, port=None, memory='4g', lang='en', timeout=1500, quiet=True,
-                 logging_level=logging.WARNING):
+                 logging_level=logging.WARNING, ssplit_eolonly='false'):
         self.path_or_host = path_or_host
         self.port = port
         self.memory = memory
@@ -31,6 +31,7 @@ class StanfordCoreNLP:
         self.timeout = timeout
         self.quiet = quiet
         self.logging_level = logging_level
+        self.ssplit_eolonly = ssplit_eolonly
 
         logging.basicConfig(level=self.logging_level)
 
@@ -218,7 +219,7 @@ class StanfordCoreNLP:
         if sys.version_info.major >= 3:
             data = data.encode('utf-8')
 
-        properties = {'annotators': annotators, 'outputFormat': 'json'}
+        properties = {'annotators': annotators, 'outputFormat': 'json', 'ssplit.eolonly': self.ssplit_eolonly}
         params = {'properties': str(properties), 'pipelineLanguage': self.lang}
         if 'pattern' in kwargs:
             params = {"pattern": kwargs['pattern'], 'properties': str(properties), 'pipelineLanguage': self.lang}
